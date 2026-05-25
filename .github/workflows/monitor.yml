@@ -6,12 +6,13 @@ on:
     - cron: "*/15 * * * *"
   workflow_dispatch:  # Allows manual trigger from the Actions tab (great for testing)
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Check out repo
