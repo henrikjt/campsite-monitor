@@ -2,8 +2,10 @@ name: Campsite Monitor
 
 on:
   schedule:
-    # Runs every 15 minutes. Note: GitHub Actions cron may fire a few minutes late during peak load.
+    # Every 15 minutes throughout the day
     - cron: "*/15 * * * *"
+    # Every 5 minutes from 7am–9am PDT (14:00–15:59 UTC) to catch 8am cancellation unlocks
+    - cron: "*/5 14-15 * * *"
   workflow_dispatch:  # Allows manual trigger from the Actions tab (great for testing)
 
 env:
