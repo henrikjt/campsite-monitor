@@ -34,7 +34,7 @@ notifications:
     priority: "high"     # low / default / high / urgent / max
     tags: "tent,bell"    # ntfy emoji tags (optional)
   email:
-    enabled: false
+    enabled: true
     from_addr: ""
     to_addr: ""
     smtp_host: "smtp.gmail.com"
