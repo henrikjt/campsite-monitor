@@ -1,0 +1,45 @@
+campground:
+  facility_id: "653"
+  name: "Samuel P. Taylor State Park - Creekside Loop"
+  base_url: "https://california-rdr.prod.cali.rd12.recreation-management.tylerapp.com/rdr/search/grid"
+  booking_url: "https://reservecalifornia.com/park/705"
+
+# Site numbers to monitor (Creekside Loop only)
+sites:
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 14
+  - 16
+  - 18
+  - 19
+  - 20
+
+dates:
+  start: "today"       # "today" resolves at runtime; or use "YYYY-MM-DD"
+  end: "2026-07-01"
+  chunk_days: 14       # Number of days per API request window
+
+polling:
+  interval_minutes: 15   # Informational only — actual schedule is set in monitor.yml
+  request_timeout: 20    # Seconds before an API call times out
+
+notifications:
+  ntfy:
+    enabled: true
+    server: "https://ntfy.sh"
+    # Topic is set via NTFY_TOPIC environment variable — do not put it here
+    priority: "high"     # low / default / high / urgent / max
+    tags: "tent,bell"    # ntfy emoji tags (optional)
+  email:
+    enabled: false
+    from_addr: ""
+    to_addr: ""
+    smtp_host: "smtp.gmail.com"
+    smtp_port: 587
+    # Credentials via EMAIL_SMTP_USER and EMAIL_SMTP_PASSWORD env vars
+
+logging:
+  level: "INFO"   # DEBUG for verbose output during development

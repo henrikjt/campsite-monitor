@@ -1,0 +1,36 @@
+name: Campsite Monitor
+
+on:
+  schedule:
+    # Runs every 15 minutes. Note: GitHub Actions cron may fire a few minutes late during peak load.
+    - cron: "*/15 * * * *"
+  workflow_dispatch:  # Allows manual trigger from the Actions tab (great for testing)
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run campsite monitor
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          # Uncomment below if you enable email in config.yaml
+          # EMAIL_SMTP_USER: ${{ secrets.EMAIL_SMTP_USER }}
+          # EMAIL_SMTP_PASSWORD: ${{ secrets.EMAIL_SMTP_PASSWORD }}
+          # EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python monitor.py
