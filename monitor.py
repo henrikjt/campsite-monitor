@@ -360,7 +360,8 @@ def list_sites(cfg: dict):
 def test_notify(cfg: dict):
     log.info("Sending test notification …")
     send_ntfy(cfg, site_num=7, night_str="2026-06-15", is_locked=False)
-    log.info("Test notification sent. Check your phone.")
+    send_email(cfg, site_num=7, night_str="2026-06-15")
+    log.info("Test notification sent. Check your phone and email.")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
