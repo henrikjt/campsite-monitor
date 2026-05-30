@@ -429,6 +429,11 @@ def main():
     prev_seen: dict[str, set[str]] = {k: set(v) for k, v in prev_state.items()}
     curr_seen: dict[str, set[str]] = {}
 
+    # Build a set of all currently available (site_num, date) pairs for consecutive-night checks
+    available_nights: dict[int, set[date]] = {}
+    for (site_num, night_str) in available:
+        available_nights.setdefault(site_num, set()).add(date.fromisoformat(night_str))
+
     alert_count = 0
     for (site_num, night_str), is_locked in sorted(available.items()):
         key = state_key(site_num)
@@ -436,11 +441,20 @@ def main():
             curr_seen[key] = set()
         curr_seen[key].add(night_str)
 
-        # Alert only if this (site, date) is new
+        # Alert only if this (site, date) is new and forms a 2-night consecutive stay
         if night_str not in prev_seen.get(key, set()):
-            log.info("NEW AVAILABILITY: Site %d on %s (locked=%s)", site_num, night_str, is_locked)
-            send_alerts(cfg, site_num, night_str, is_locked, dry_run=args.dry_run)
-            alert_count += 1
+            night = date.fromisoformat(night_str)
+            site_nights = available_nights.get(site_num, set())
+            has_consecutive = (
+                (night + timedelta(days=1)) in site_nights
+                or (night - timedelta(days=1)) in site_nights
+            )
+            if has_consecutive:
+                log.info("NEW AVAILABILITY: Site %d on %s (locked=%s)", site_num, night_str, is_locked)
+                send_alerts(cfg, site_num, night_str, is_locked, dry_run=args.dry_run)
+                alert_count += 1
+            else:
+                log.info("SKIPPED (no consecutive night): Site %d on %s", site_num, night_str)
 
     if alert_count == 0:
         log.info("No new availability since last run.")
