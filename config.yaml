@@ -19,7 +19,7 @@ sites:
 
 dates:
   start: "today"       # "today" resolves at runtime; or use "YYYY-MM-DD"
-  end: "2026-07-01"
+  end: "2026-10-31"
   chunk_days: 14       # Number of days per API request window
 
 polling:
