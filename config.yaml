@@ -21,6 +21,8 @@ dates:
   start: "today"       # "today" resolves at runtime; or use "YYYY-MM-DD"
   end: "2026-10-31"
   chunk_days: 14       # Number of days per API request window
+  pause_start: "2026-07-01"   # Stop monitoring on this date (inclusive)
+  pause_end: "2026-08-12"     # Resume monitoring on this date (inclusive)
 
 polling:
   interval_minutes: 15   # Informational only — actual schedule is set in monitor.yml

@@ -404,6 +404,16 @@ def main():
     if not args.dry_run:
         check_env()
 
+    # Check pause window
+    pause_start = cfg["dates"].get("pause_start")
+    pause_end = cfg["dates"].get("pause_end")
+    if pause_start and pause_end:
+        ps = datetime.strptime(pause_start, "%Y-%m-%d").date()
+        pe = datetime.strptime(pause_end, "%Y-%m-%d").date()
+        if ps <= date.today() <= pe:
+            log.info("Monitor is paused until %s. Skipping this run.", pause_end)
+            return
+
     # Load previous state: {site_key: [date_str, ...]}
     prev_state: dict[str, list[str]] = load_state()
 
