@@ -261,8 +261,10 @@ def send_ntfy(cfg: dict, site_num: int, night_str: str, is_locked: bool):
 
     booking_url = cfg["campground"]["booking_url"]
     lock_note = " (recently cancelled — grab it fast!)" if is_locked else ""
+    night = date.fromisoformat(night_str)
+    night_display = night.strftime("%A, %Y-%m-%d")
     message = (
-        f"Site {site_num} is available for {night_str}{lock_note}\n"
+        f"Site {site_num} is available for {night_display}{lock_note}\n"
         f"Book now: {booking_url}"
     )
 
@@ -297,12 +299,14 @@ def send_email(cfg: dict, site_num: int, night_str: str):
         return
 
     booking_url = cfg["campground"]["booking_url"]
+    night = date.fromisoformat(night_str)
+    night_display = night.strftime("%A, %Y-%m-%d")
     body = (
         f"Good news — Site {site_num} at {cfg['campground']['name']} "
-        f"is available for {night_str}.\n\nBook now: {booking_url}"
+        f"is available for {night_display}.\n\nBook now: {booking_url}"
     )
     msg = MIMEText(body)
-    msg["Subject"] = f"Campsite Alert: Site {site_num} on {night_str}"
+    msg["Subject"] = f"Campsite Alert: Site {site_num} on {night_display}"
     msg["From"] = smtp_user
     msg["To"] = to_addr
 
